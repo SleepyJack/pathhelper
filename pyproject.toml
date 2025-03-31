@@ -1,0 +1,14 @@
+[project]
+name = "pathtools"
+version = "0.1.0"
+description = "Lightweight tools for working with filesystem paths."
+authors = [
+    { name = "SleepyJack" }
+]
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.7"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

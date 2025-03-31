@@ -1,2 +1,2 @@
 # pathtools
-Tools for working with file and directory paths
+Lightweight tools for working with filesystem paths
