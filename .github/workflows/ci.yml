@@ -23,7 +23,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Show version
-        run: echo "Injected version: $VERSION"
+        run: 'echo "Injected version: $VERSION"'
         env:
           VERSION: ${{ steps.setup.outputs.version }}
 
@@ -45,7 +45,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Show version
-        run: echo "Injected version: $VERSION"
+        run: 'echo "Injected version: $VERSION"'
         env:
           VERSION: ${{ steps.setup.outputs.version }}
 
@@ -75,7 +75,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Show version
-        run: echo "Injected version: $VERSION"
+        run: 'echo "Injected version: $VERSION"'
         env:
           VERSION: ${{ steps.setup.outputs.version }}
 
