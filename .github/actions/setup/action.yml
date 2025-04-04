@@ -1,0 +1,29 @@
+name: "Pathtools Setup"
+description: "Install dependencies and inject version based on tag or commit"
+
+outputs:
+  version:
+    description: "The version string that was injected"
+    value: ${{ steps.version.outputs.version }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install requirements
+      run: pip install -r requirements.txt
+
+    - name: Determine version
+      id: version
+      shell: bash
+      run: |
+        if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+          VERSION=${GITHUB_REF#refs/tags/v}
+        else
+          VERSION=$(git rev-parse --short=8 HEAD)
+        fi
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+    - name: Inject version
+      run: python scripts/inject_version.py "$VERSION"
+      env:
+        VERSION: ${{ steps.version.outputs.version }}
