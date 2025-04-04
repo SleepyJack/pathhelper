@@ -1,7 +1,7 @@
 import argparse
 import os
 
-version_tag = "UNKNOWN"
+version_tag = '"UNKNOWN"'
 
 def replace_version_string(filepath: str, version: str):
     with open(filepath, 'r', encoding='utf-8') as f:
