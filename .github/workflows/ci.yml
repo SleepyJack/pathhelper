@@ -23,7 +23,9 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Show version
-        run: echo "Injected version: ${{ steps.setup.outputs.version }}"
+        run: echo "Injected version: $VERSION"
+        env:
+          VERSION: ${{ steps.setup.outputs.version }}
 
       - name: Run tests
         run: python -m unittest discover -s tests
@@ -43,7 +45,9 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Show version
-        run: echo "Injected version: ${{ steps.setup.outputs.version }}"
+        run: echo "Injected version: $VERSION"
+        env:
+          VERSION: ${{ steps.setup.outputs.version }}
 
       - name: Build package
         run: python -m build
@@ -71,7 +75,9 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Show version
-        run: echo "Injected version: ${{ steps.setup.outputs.version }}"
+        run: echo "Injected version: $VERSION"
+        env:
+          VERSION: ${{ steps.setup.outputs.version }}
 
       - name: Validate version format
         run: |
