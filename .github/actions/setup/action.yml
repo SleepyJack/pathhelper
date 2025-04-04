@@ -21,7 +21,7 @@ runs:
         if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
           VERSION=${GITHUB_REF#refs/tags/v}
         else
-          VERSION=\"0.0.0.dev0+$(git rev-parse --short=8 HEAD)\"
+          VERSION=0.0.0.dev0+$(git rev-parse --short=8 HEAD)
         fi
         echo "Detected version: $VERSION"
         echo "version=$VERSION" >> "$GITHUB_OUTPUT"
