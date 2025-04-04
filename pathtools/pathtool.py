@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 class PathTool(ABC):
 
     def __init__(self, path):
-        self.path = path
+        self.path = os.path.abspath(path)
 
     @abstractmethod
     def check_exists(self):
