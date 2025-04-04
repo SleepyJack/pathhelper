@@ -1,6 +1,6 @@
 [project]
 name = "pathtools"
-version = "UNKONWN"
+version = "UNKNOWN"
 description = "Lightweight tools for working with filesystem paths."
 authors = [
     { name = "SleepyJack" }
