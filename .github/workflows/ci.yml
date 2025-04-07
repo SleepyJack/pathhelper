@@ -6,6 +6,7 @@ on:
       - '**'
     tags:
       - 'v*.*.*'
+      - 't*.*.*'
 
 jobs:
   test:
@@ -60,7 +61,7 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
-    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+    if: ${{ startsWith(github.ref, 'refs/tags/v') || startsWith(github.ref, 'refs/tags/t') }}
     needs: [test, build]
     steps:
       - uses: actions/checkout@v4
@@ -79,12 +80,33 @@ jobs:
         env:
           VERSION: ${{ steps.setup.outputs.version }}
 
+      - name: Determine release track
+        id: track
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/t* ]]; then
+            echo "repository_url=https://test.pypi.org/legacy/" >> "$GITHUB_OUTPUT"
+            echo "token_name=TEST_PYPI_API_TOKEN" >> "$GITHUB_OUTPUT"
+            echo "track=test" >> "$GITHUB_OUTPUT"
+          else
+            echo "repository_url=https://upload.pypi.org/legacy/" >> "$GITHUB_OUTPUT"
+            echo "token_name=PYPI_API_TOKEN" >> "$GITHUB_OUTPUT"
+            echo "track=release" >> "$GITHUB_OUTPUT"
+
       - name: Validate version format
         run: |
           VERSION=${{ steps.setup.outputs.version }}
-          if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Error: Version '$VERSION' is not in the format major.minor.patch"
-            exit 1
+          TRACK=${{ steps.track.outputs.track }}
+
+          if [[ "$TRACK" == "test" ]]; then
+            if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+(rc[0-9]+|dev[0-9]+)?$ ]]; then
+              echo "Test release version must follow 'X.Y.ZrcN' or 'X.Y.ZdevN'. Got: '$VERSION'"
+              exit 1
+            fi
+          else
+            if ! [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+              echo "Production release version must be 'X.Y.Z'. Got: '$VERSION'"
+              exit 1
+            fi
           fi
 
       - name: Download build artifacts
@@ -93,8 +115,8 @@ jobs:
           name: dist-files
           path: dist
 
-      - name: Upload to Test PyPI
+      - name: Upload to PyPI/Test PyPI
         env:
           TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.TEST_PYPI_API_TOKEN }}
-        run: twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+          TWINE_PASSWORD: ${{ secrets[steps.track.outputs.token_name] }}
+        run: twine upload --repository-url ${{ steps.track.outputs.repository_url }} dist/*
