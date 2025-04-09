@@ -2,12 +2,30 @@
 name = "pathtools"
 version = "UNKNOWN"
 description = "Lightweight tools for working with filesystem paths."
+readme = "README.md"
+requires-python = ">=3.7"
+
+license = { text = "MIT" }
+
 authors = [
     { name = "SleepyJack" }
 ]
-readme = "README.md"
-license = "MIT"
-requires-python = ">=3.7"
+
+keywords = ["filesystem", "path", "directory", "file", "utilities"]
+
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3
+]
+
+[project.urls]
+Homepage = "https://github.com/SleepyJack/pathtools"
+Source = "https://github.com/SleepyJack/pathtools"
+Tracker = "https://github.com/SleepyJack/pathtools/issues"
+Documentation = "https://github.com/SleepyJack/pathtools#readme"
 
 [build-system]
 requires = ["setuptools>=61.0"]
