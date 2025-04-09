@@ -20,6 +20,8 @@ runs:
       run: |
         if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
           VERSION=${GITHUB_REF#refs/tags/v}
+        elif [[ "$GITHUB_REF" == refs/tags/t* ]]; then
+          VERSION=${GITHUB_REF#refs/tags/t}
         else
           VERSION=0.0.0.dev0+$(git rev-parse --short=8 HEAD)
         fi
