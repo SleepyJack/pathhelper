@@ -91,6 +91,7 @@ jobs:
             echo "repository_url=https://upload.pypi.org/legacy/" >> "$GITHUB_OUTPUT"
             echo "token_name=PYPI_API_TOKEN" >> "$GITHUB_OUTPUT"
             echo "track=release" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Validate version format
         run: |
