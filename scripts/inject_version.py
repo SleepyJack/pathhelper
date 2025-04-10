@@ -25,7 +25,7 @@ def main():
     project_root = os.path.abspath(os.path.join(script_dir, os.pardir))
 
     pyproject_path = os.path.join(project_root, "pyproject.toml")
-    init_path = os.path.join(project_root, "pathtools", "__init__.py")
+    init_path = os.path.join(project_root, "pathetic", "__init__.py")
 
     replace_version_string(pyproject_path, version)
     replace_version_string(init_path, version)
