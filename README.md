@@ -1,6 +1,6 @@
-# Pathtools
+# Pathetic
 
-**Pathtools** is a lightweight library for working with file and directory paths in Python. It provides simple interfaces and clear syntax for checking, creating, and removing paths — with helpful utilities for working in temporary directories.
+**Pathetic** is a lightweight library for working with file and directory paths in Python. It provides simple interfaces and clear syntax for checking, creating, and removing paths — with helpful utilities for working in temporary directories.
 
 ---
 
@@ -17,7 +17,7 @@
 ## 📦 Installation
 
 ```bash
-pip install pathtools
+pip install pathetic
 ```
 
 ---
@@ -25,7 +25,7 @@ pip install pathtools
 ## 🚀 Quick Example
 
 ```python
-from pathtools import DirTool, FileTool, RunInDir
+from pathetic import DirTool, FileTool, RunInDir
 import os
 
 # Create a directory if it doesn't exist
@@ -71,4 +71,4 @@ MIT License
 
 ## 🔗 Links
 
-* Package: [PyPi](https://pypi.org/project/pathtools/)
+* Package: [PyPi](https://pypi.org/project/pathetic/)

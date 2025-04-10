@@ -1,5 +1,5 @@
 [project]
-name = "pathtools"
+name = "pathetic"
 version = "UNKNOWN"
 description = "Lightweight tools for working with filesystem paths."
 readme = "README.md"
@@ -22,10 +22,10 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/SleepyJack/pathtools"
-Source = "https://github.com/SleepyJack/pathtools"
-Tracker = "https://github.com/SleepyJack/pathtools/issues"
-Documentation = "https://github.com/SleepyJack/pathtools#readme"
+Homepage = "https://github.com/SleepyJack/pathetic"
+Source = "https://github.com/SleepyJack/pathetic"
+Tracker = "https://github.com/SleepyJack/pathetic/issues"
+Documentation = "https://github.com/SleepyJack/pathetic#readme"
 
 [build-system]
 requires = ["setuptools>=61.0"]

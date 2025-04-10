@@ -1,8 +1,8 @@
 import unittest
-from pathtools import FileTool, DirTool, RunInDir
+from pathetic import FileTool, DirTool, RunInDir
 import os
 
-class TestPathTools(unittest.TestCase):
+class TestPathetic(unittest.TestCase):
 
     def setUp(self):
         self.test_file = "testfile.txt"
