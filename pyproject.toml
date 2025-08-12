@@ -1,7 +1,7 @@
 [project]
-name = "pathetic"
+name = "pathhelper"
 version = "UNKNOWN"
-description = "Lightweight tools for working with filesystem paths."
+description = "Lightweight helpers for working with filesystem paths."
 readme = "README.md"
 requires-python = ">=3.7"
 
@@ -22,10 +22,10 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/SleepyJack/pathetic"
-Source = "https://github.com/SleepyJack/pathetic"
-Tracker = "https://github.com/SleepyJack/pathetic/issues"
-Documentation = "https://github.com/SleepyJack/pathetic#readme"
+Homepage = "https://github.com/SleepyJack/pathhelper"
+Source = "https://github.com/SleepyJack/pathhelper"
+Tracker = "https://github.com/SleepyJack/pathhelper/issues"
+Documentation = "https://github.com/SleepyJack/pathhelper#readme"
 
 [build-system]
 requires = ["setuptools>=61.0"]

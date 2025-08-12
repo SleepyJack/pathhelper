@@ -3,7 +3,7 @@ import shutil
 from abc import ABC, abstractmethod
 
 # Abstract base class for path tools
-class PatheticTool(ABC):
+class PathHelper(ABC):
 
     def __init__(self, path):
         self.path = os.path.abspath(path)
@@ -28,15 +28,14 @@ class PatheticTool(ABC):
         if self.check_exists():
             self.remove()
 
-# File path tool
-class FileTool(PatheticTool):
+class FileHelper(PathHelper):
 
     def check_exists(self):
         return os.path.isfile(self.path)
 
     def create(self):
         file_dir = os.path.dirname(self.path)
-        DirTool(file_dir).create_if_missing()
+        DirHelper(file_dir).create_if_missing()
         with open(self.path, 'w') as f:
             pass  # create empty file
 
@@ -44,7 +43,7 @@ class FileTool(PatheticTool):
         os.remove(self.path)
 
 # Directory path tool
-class DirTool(PatheticTool):
+class DirHelper(PathHelper):
 
     def check_exists(self):
         return os.path.isdir(self.path)
@@ -70,8 +69,8 @@ class RunInDir:
 # Example usage
 if __name__ == "__main__":
     temp_dir = 'temp'
-    dir_tool = DirTool(temp_dir)
-    dir_tool.create_if_missing()
+    dir_helper = DirHelper(temp_dir)
+    dir_helper.create_if_missing()
 
     print("Before:", os.getcwd())
     with RunInDir(temp_dir):

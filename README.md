@@ -1,13 +1,13 @@
-# Pathetic
+# PathHelper
 
-**Pathetic** is a lightweight library for working with file and directory paths in Python. It provides simple interfaces and clear syntax for checking, creating, and removing paths — with helpful utilities for working in temporary directories.
+**PathHelper** is a lightweight library for working with file and directory paths in Python. It provides simple interfaces and clear syntax for checking, creating, and removing paths — with helpful utilities for working in temporary directories.
 
 ---
 
 ## ✨ Features
 
-- `FileTool`: check, create, and remove files
-- `DirTool`: check, create, and remove directories
+- `FileHelper`: check, create, and remove files
+- `DirHelper`: check, create, and remove directories
 - `RunInDir`: context manager to temporarily change working directory
 - Simplifies common scripting operations
 - Minimal dependencies and clean API
@@ -17,7 +17,7 @@
 ## 📦 Installation
 
 ```bash
-pip install pathetic
+pip install pathhelper
 ```
 
 ---
@@ -25,19 +25,19 @@ pip install pathetic
 ## 🚀 Quick Example
 
 ```python
-from pathetic import DirTool, FileTool, RunInDir
+from pathhelper import DirHelper, FileHelper, RunInDir
 import os
 
 # Create a directory if it doesn't exist
-dir_tool = DirTool("temp_folder")
-dir_tool.create_if_missing()
+dir_helper = DirHelper("temp_folder")
+dir_helper.create_if_missing()
 
 # Switch to that directory temporarily
 with RunInDir("temp_folder"):
     print("Now inside:", os.getcwd())
 
 # Clean up afterward
-dir_tool.remove_if_present()
+dir_helper.remove_if_present()
 
 ```
 
@@ -47,13 +47,13 @@ dir_tool.remove_if_present()
 
 | Class | Method / Constructor| Description|
 |-------|---------------------|------------|
-| FileTool | `__init__(path)` | Initializes a file path tool with the given file path |
+| FileHelper | `__init__(path)` | Initializes a file path helper with the given file path |
 |          | `check_exists()` | Returns True if the file exists |
 |          | `create()` | Creates the file and any necessary parent directories |
 |          | `remove()` | Removes the file |
 |          | `create_if_missing()` | Creates the file only if it doesn’t exist |
 |          | `remove_if_present()` | Removes the file only if it exists |
-| DirTool  | `__init__(path)` | Initializes a directory path tool with the given directory path |
+| DirHelper  | `__init__(path)` | Initializes a directory path helper with the given directory path |
 |          | `check_exists()` | Returns True if the directory exists |
 |          | `create()` | Creates the directory (and parents) |
 |          | `remove()` | Recursively removes the directory and contents |
@@ -71,4 +71,4 @@ MIT License
 
 ## 🔗 Links
 
-* Package: [PyPi](https://pypi.org/project/pathetic/)
+* Package: [PyPi](https://pypi.org/project/pathhelper/)
