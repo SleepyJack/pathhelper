@@ -71,4 +71,6 @@ MIT License
 
 ## 🔗 Links
 
+
 * Package: [PyPi](https://pypi.org/project/pathhelper/)
+* Developer docs: [Development Guide](doc/development_guide.md)
