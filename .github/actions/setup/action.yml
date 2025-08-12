@@ -1,4 +1,4 @@
-name: Pathetic Setup
+name: PathHelper Setup
 
 description: Install dependencies and inject version based on tag or commit
 
