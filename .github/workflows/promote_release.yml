@@ -14,13 +14,127 @@ on:
         type: choice
         options: ["false", "true"]
 
+permissions:
+  contents: write
+
 jobs:
-  noop:
+  promote:
     runs-on: ubuntu-latest
+    env:
+      PACKAGE_NAME: pathhelper
+      TEST_PYPI_INDEX: https://test.pypi.org/simple/
+      PYPI_INDEX: https://pypi.org/simple/
+
     steps:
-      - name: Placeholder
+      - name: Parse/validate rc_tag
+        id: parse
+        shell: bash
         run: |
-          echo "This is a placeholder for the promotion workflow."
-          echo "It exists only so the workflow shows up in the Actions UI."
-          echo "Selected rc_tag=${{ inputs.rc_tag }}"
-          echo "dry_run=${{ inputs.dry_run }}"
+          set -euo pipefail
+          RC_TAG="${{ inputs.rc_tag }}"
+          if [[ ! "$RC_TAG" =~ ^t([0-9]+)\.([0-9]+)\.([0-9]+)rc([0-9]+)$ ]]; then
+            echo "Invalid rc_tag format. Expected tX.Y.ZrcN (e.g. t1.2.3rc1)"; exit 1
+          fi
+          MAJOR="${BASH_REMATCH[1]}"
+          MINOR="${BASH_REMATCH[2]}"
+          PATCH="${BASH_REMATCH[3]}"
+          RCNUM="${BASH_REMATCH[4]}"
+          echo "rc_version=${MAJOR}.${MINOR}.${PATCH}rc${RCNUM}" >> $GITHUB_OUTPUT
+          echo "prod_version=${MAJOR}.${MINOR}.${PATCH}" >> $GITHUB_OUTPUT
+          echo "prod_tag=v${MAJOR}.${MINOR}.${PATCH}" >> $GITHUB_OUTPUT
+
+      - name: Checkout (with tags)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify tags
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --tags --force
+          git rev-parse --verify "refs/tags/${{ inputs.rc_tag }}" >/dev/null
+          if git rev-parse --verify "refs/tags/${{ steps.parse.outputs.prod_tag }}" >/dev/null 2>&1; then
+            echo "Production tag ${{ steps.parse.outputs.prod_tag }} already exists."; exit 1
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Create fresh venv
+        shell: bash
+        run: |
+          python -m venv .venv
+          echo "$(pwd)/.venv/bin" >> $GITHUB_PATH
+          echo "VIRTUAL_ENV=$(pwd)/.venv" >> $GITHUB_ENV
+
+      - name: Install RC from TestPyPI
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip wheel
+          python -m pip install \
+            --index-url "${TEST_PYPI_INDEX}" \
+            --extra-index-url "${PYPI_INDEX}" \
+            "${PACKAGE_NAME}==${{ steps.parse.outputs.rc_version }}"
+
+      - name: Validate installed package metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import importlib.metadata as m
+          want = "${{ steps.parse.outputs.rc_version }}"
+          name = "${{ env.PACKAGE_NAME }}"
+          got = m.version(name)
+          assert got == want, f"Installed {name} {got}, expected {want}"
+          print(f"✅ {name} {got} installed from TestPyPI and matches expected RC")
+          PY
+
+      - name: Copy tests to isolated workspace
+        id: testdir
+        shell: bash
+        run: |
+          mkdir -p /tmp/pkg-tests
+          cp -r tests /tmp/pkg-tests/
+          echo "test_dir=/tmp/pkg-tests" >> $GITHUB_OUTPUT
+
+      - name: Run tests against installed package
+        working-directory: ${{ steps.testdir.outputs.test_dir }}
+        env:
+          PYTHONNOUSERSITE: "1"
+          PYTHONPATH: ""
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s tests -p "test*.py" -v
+
+      - name: Create & push production tag
+        id: push_tag
+        if: inputs.dry_run == 'false' && github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout --detach "refs/tags/${{ inputs.rc_tag }}"
+          git tag -a "${{ steps.parse.outputs.prod_tag }}" \
+            -m "Promote ${{ inputs.rc_tag }} ➜ ${{ steps.parse.outputs.prod_version }}"
+          git push origin "refs/tags/${{ steps.parse.outputs.prod_tag }}"
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Summary
+        shell: bash
+        run: |
+          echo "RC tag:        ${{ inputs.rc_tag }}"
+          echo "RC version:    ${{ steps.parse.outputs.rc_version }}"
+          echo "Prod version:  ${{ steps.parse.outputs.prod_version }}"
+          echo "Prod tag:      ${{ steps.parse.outputs.prod_tag }}"
+          pushed="${{ steps.push_tag.outputs.pushed }}"
+          if [ "$pushed" = "true" ]; then
+            echo "Tag pushed:    yes"
+          else
+            echo "Tag pushed:    no"
+          fi
