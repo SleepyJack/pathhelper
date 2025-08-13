@@ -1,0 +1,26 @@
+name: Promote RC to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      rc_tag:
+        description: "Release candidate tag to promote (e.g. t1.2.3rc1)"
+        required: true
+        type: string
+      dry_run:
+        description: "Validate & test only (no tagging/push)"
+        required: false
+        default: "true"
+        type: choice
+        options: ["false", "true"]
+
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder
+        run: |
+          echo "This is a placeholder for the promotion workflow."
+          echo "It exists only so the workflow shows up in the Actions UI."
+          echo "Selected rc_tag=${{ inputs.rc_tag }}"
+          echo "dry_run=${{ inputs.dry_run }}"
