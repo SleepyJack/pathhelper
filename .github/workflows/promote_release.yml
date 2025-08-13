@@ -10,7 +10,7 @@ on:
       dry_run:
         description: "Validate & test only (no tagging/push)"
         required: false
-        default: "false"
+        default: "true"
         type: choice
         options: ["false", "true"]
 
