@@ -122,7 +122,8 @@ jobs:
           git checkout --detach "refs/tags/${{ inputs.rc_tag }}"
           git tag -a "${{ steps.parse.outputs.prod_tag }}" \
             -m "Promote ${{ inputs.rc_tag }} ➜ ${{ steps.parse.outputs.prod_version }}"
-          git push origin "refs/tags/${{ steps.parse.outputs.prod_tag }}"
+          REPO="https://x-access-token:${{ secrets.RELEASE_PROMOTION_PAT }}@github.com/${{ github.repository }}.git"
+          git push "$REPO" "refs/tags/${{ steps.parse.outputs.prod_tag }}"
           echo "pushed=true" >> "$GITHUB_OUTPUT"
 
       - name: Summary
