@@ -113,3 +113,4 @@ Ensure these GitHub repository secrets are set:
 
 - `PYPI_API_TOKEN` – for production releases to PyPI.
 - `TEST_PYPI_API_TOKEN` – for test releases to TestPyPI.
+- `RELEASE_PROMOTION_PAT` – github PAT for release promotion workflow.
