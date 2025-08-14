@@ -47,6 +47,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: ${{ secrets.RELEASE_PROMOTION_PAT }}  # Need to checkout with PAT so that when we push tags it will trigger subsequent workflows
 
       - name: Verify tags
         shell: bash
@@ -122,8 +123,7 @@ jobs:
           git checkout --detach "refs/tags/${{ inputs.rc_tag }}"
           git tag -a "${{ steps.parse.outputs.prod_tag }}" \
             -m "Promote ${{ inputs.rc_tag }} ➜ ${{ steps.parse.outputs.prod_version }}"
-          REPO="https://x-access-token:${{ secrets.RELEASE_PROMOTION_PAT }}@github.com/${{ github.repository }}.git"
-          git push "$REPO" "refs/tags/${{ steps.parse.outputs.prod_tag }}"
+          git push origin "refs/tags/${{ steps.parse.outputs.prod_tag }}"
           echo "pushed=true" >> "$GITHUB_OUTPUT"
 
       - name: Summary
